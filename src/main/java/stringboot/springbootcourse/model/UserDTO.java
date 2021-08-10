@@ -1,11 +1,11 @@
-package stringboot.springbootcourse;
+package stringboot.springbootcourse.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class User {
+public class UserDTO {
 
     private Long id;
     private String firstName;

@@ -1,9 +1,9 @@
-package stringboot.springbootcourse;
+package stringboot.springbootcourse.model;
 
 import lombok.Data;
 
 @Data
-public class Course {
+public class CourseDTO {
     private Long id;
     private String name;
     private int lengthInSeconds;
