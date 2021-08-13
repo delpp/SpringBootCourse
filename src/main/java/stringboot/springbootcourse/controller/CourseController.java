@@ -1,10 +1,12 @@
 package stringboot.springbootcourse.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import stringboot.springbootcourse.model.CourseDTO;
 import stringboot.springbootcourse.exception.WrongIdException;
+import stringboot.springbootcourse.service.CourseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,30 +15,34 @@ import java.util.List;
 @RequestMapping(value = "/course")
 public class CourseController {
 
-    private List<CourseDTO> cours = new ArrayList<>();
+    private List<CourseDTO> course = new ArrayList<>();
+
+    @Autowired
+    CourseService courseService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<CourseDTO> createCourse(@RequestBody CourseDTO courseDTO){
-        if (courseDTO.getId()==null || courseDTO.getId()<0)
-            throw new WrongIdException("Obiekt kurs posiada id nullowe lub < 0");
-        cours.add(courseDTO);
-        System.out.println(courseDTO.getName());
-        System.out.println(courseDTO.getLengthInSeconds());
-
-        return new ResponseEntity<>(courseDTO, HttpStatus.CREATED);
+        if (courseDTO.getId() != null)
+            throw new WrongIdException("Tworzony kurs nie powinien posiadać ID");
+        System.out.println("/course/create: " + courseDTO.getName());
+        CourseDTO dto = courseService.createCourse(courseDTO);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/available", method = RequestMethod.GET)
     public ResponseEntity<List<CourseDTO>> getAvailableCourses(){
-        return new ResponseEntity<>(cours, HttpStatus.OK);
+        System.out.println("/course/available");
+        return new ResponseEntity<>(courseService.getAllCourses(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "buy/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "buy/{id}", method = RequestMethod.GET)
     public CourseDTO buyCourse(@PathVariable(value = "id") Long id){
         System.out.println("buyCourse()");
-        return getCourse(id);
+//        Course course = new Course();
+//        course.setName("cc1");
+//        courseService.save(course);
+        return null;
     }
-
 
     @RequestMapping(value = "buy2", method = RequestMethod.POST)
     public CourseDTO buyCourse2(@RequestParam(value = "id") Long id){
@@ -51,7 +57,7 @@ public class CourseController {
 
     private CourseDTO getCourse(Long id) {
         CourseDTO courseDTO = null;
-        for (CourseDTO c : cours){
+        for (CourseDTO c : course){
             if (c.getId()!=null && c.getId().equals(id)) {
                 courseDTO = c;
                 break;

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class UserDTO {
 
     private Long id;
@@ -14,6 +13,5 @@ public class UserDTO {
     private String password;
     private boolean author;
     private boolean admin;
-
 
 }
